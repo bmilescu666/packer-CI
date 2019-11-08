@@ -57,5 +57,5 @@ blocks:
             - aws ec2 terminate-instances --instance-ids ${INSTANCE_ID} --region ${AWS_REGION}
             - aws ec2 deregister-image --image-id ${AMI_ID} --region ${AWS_REGION}
             - aws ec2 describe-instances --instance-ids ${INSTANCE_ID}
-          secrets:
-            - name: packer-CI-ssh
+      secrets:
+        - name: packer-CI-ssh
