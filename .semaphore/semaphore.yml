@@ -12,11 +12,11 @@ blocks:
           commands:
             - >-
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
-                ## installing dependencies'
-                # installing packer'
-                wget https://releases.hashicorp.com/packer/1.4.5/packer_1.4.5_linux_amd64.zip'
-                unzip packer_1.4.5_linux_amd64.zip'
-                chmod +x packer'
-                checkout'
-                packer validate -syntax-only ami.json'        
+                ## installing dependencies
+                # installing packer
+                wget https://releases.hashicorp.com/packer/1.4.5/packer_1.4.5_linux_amd64.zip
+                unzip packer_1.4.5_linux_amd64.zip
+                chmod +x packer
+                checkout
+                packer validate -syntax-only ami.json
               fi
