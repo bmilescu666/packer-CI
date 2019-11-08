@@ -42,7 +42,7 @@ blocks:
         - name: AWS_REGION
           value: us-east-1
         - name: KEY_PAIR
-          value: API              
+          value: packer-CI              
       jobs:
         - name: test packer ami
           commands:
