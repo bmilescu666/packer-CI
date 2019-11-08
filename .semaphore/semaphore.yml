@@ -12,7 +12,7 @@ blocks:
           commands:
             - >-
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
-                sudo apt install packer -y
+                sudo apt update -y && sudo apt install packer -y
                 checkout
                 packer validate ami.json
               fi
