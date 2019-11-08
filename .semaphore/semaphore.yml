@@ -25,6 +25,7 @@ blocks:
     task:
       secrets:
         - name: AWS
+        - name: packer-CI-ssh
       jobs:
         - name: packer build
           commands:
@@ -56,6 +57,4 @@ blocks:
             - echo "Instance ${INSTANCE_ID} tested OK!"
             - aws ec2 terminate-instances --instance-ids ${INSTANCE_ID} --region ${AWS_REGION}
             - aws ec2 deregister-image --image-id ${AMI_ID} --region ${AWS_REGION}
-            - aws ec2 describe-instances --instance-ids ${INSTANCE_ID}
-      secrets:
-        - name: packer-CI-ssh
+            - aws ec2 describe-instances --instance-ids ${INSTANCE_ID}       
