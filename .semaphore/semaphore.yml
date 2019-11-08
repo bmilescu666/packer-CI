@@ -45,18 +45,16 @@ blocks:
       env_vars:
         - name: AWS_REGION
           value: us-east-1
-      prologue:
-        commands:
-          - sudo apt update -y && sudo apt install jq awscli -y
-      epilogue:
-        commands:
-          - artifact pull project manifest.json
-          - export AMI_ID=$(cat manifest.json| jq -r '.builds[].artifact_id' | sed -e "s/${AWS_REGION}://g")
-          - aws ec2 terminate-instances --instance-ids ${AMI_ID} --region ${AWS_REGION}
-          - aws ec2 deregister-image --image-id ${AMI_ID} --region ${AWS_REGION}              
+        - name: KEY_PAIR
+          value: API              
       jobs:
         - name: test packer ami
           commands:
+            - sudo apt update -y && sudo apt install jq awscli -y
+            - artifact pull project manifest.json
+            - AMI_ID=$(cat manifest.json| jq -r '.builds[].artifact_id' | sed -e "s/${AWS_REGION}://g")  
             - >-
               aws ec2 run-instances --image-id ${AMI_ID} --count 1
-              --instance-type t2.micro --key-name API
+              --instance-type t2.micro --key-name ${KEY_PAIR}
+            - aws ec2 terminate-instances --instance-ids ${AMI_ID} --region ${AWS_REGION}
+            - aws ec2 deregister-image --image-id ${AMI_ID} --region ${AWS_REGION}   
