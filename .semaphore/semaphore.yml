@@ -18,6 +18,8 @@ blocks:
                 packer validate ami.json
               fi
   - name: Build AMI
+    skip:
+     when: "branch != 'master'"
     task:
       secrets:
         - name: AWS
