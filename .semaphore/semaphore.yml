@@ -6,6 +6,8 @@ agent:
     os_image: ubuntu1804
 blocks:
   - name: ValidatePR
+    skip:
+      when: branch = 'master'
     task:
       jobs:
         - name: packer validate
