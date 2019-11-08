@@ -25,7 +25,6 @@ blocks:
     task:
       secrets:
         - name: AWS
-        - name: packer-CI-ssh
       jobs:
         - name: packer build
           commands:
@@ -38,6 +37,7 @@ blocks:
     task:
       secrets:
         - name: AWS
+        - name: packer-CI-ssh
       env_vars:
         - name: AWS_REGION
           value: us-east-1
