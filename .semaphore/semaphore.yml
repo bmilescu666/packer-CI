@@ -50,6 +50,8 @@ blocks:
           value: us-east-1
         - name: KEY_PAIR
           value: packer-CI
+        - name: SG
+          value: sg-0800e2fd2d7ac3912
       jobs:
         - name: test packer ami
           commands:
