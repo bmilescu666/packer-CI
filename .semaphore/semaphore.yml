@@ -70,15 +70,8 @@ blocks:
               AMI_ID=$(cat manifest.json | jq -r '.builds[].artifact_id' | sed -e
               "s/${AWS_REGION}://g")
             - >-
-              ami_spec \
-              --specs=spec \ 
-              --role=web_server \
-              --key-name=${KEY_PAIR} \
-              --key-file=~/.ssh/packer-CI.pem \
-              --ssh-user=${SSH_USER} \
-              --aws-region=${AWS_REGION} \
-              --ami=${AMI_ID} \
-              --aws-security-groups=${SG} \
+              ami_spec --specs=spec --role=web_server --key-name=${KEY_PAIR} --key-file=~/.ssh/packer-CI.pem 
+              --ssh-user=${SSH_USER} --aws-region=${AWS_REGION} --ami=${AMI_ID} --aws-security-groups=${SG} 
               --aws-public-ip                
             - >-
               aws ec2 deregister-image --image-id ${AMI_ID} --region
