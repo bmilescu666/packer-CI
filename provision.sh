@@ -1,4 +1,4 @@
 #!/bin/bash
-sudo apt update -y && sudo apt upgrade -y
-sudo apt install apache2 -y
+sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get -y autoremove
+sudo apt-get -y install apache2
 sudo systemctl status apache2
