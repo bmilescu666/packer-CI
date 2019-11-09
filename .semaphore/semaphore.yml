@@ -19,6 +19,7 @@ blocks:
                 checkout
                 packer validate ami.json
               fi
+    dependencies: []
   - name: Build AMI
     skip:
       when: branch != 'master'
@@ -40,6 +41,7 @@ blocks:
               packer build -var "aws_access_key=${AWS_ACCESS_KEY_ID}" -var
               "aws_secret_key=${AWS_SECRET_ACCESS_KEY}" ami.json
             - artifact push project manifest.json --force
+    dependencies: []
   - name: Test AMI
     task:
       secrets:
@@ -81,8 +83,8 @@ blocks:
               echo "Testing EC2 instance Id:${INSTANCE_ID}, Public
               IP:${INSTANCE_PUBLIC_IP} generated from ami ${AMI_ID}."
             - >-
-              chmod 400 packer-CI.pem && ssh -oStrictHostKeyChecking=no -i
-              packer-CI.pem ${SSH_USER}@${INSTANCE_PUBLIC_IP} 'uptime; df -h'
+              ls -la && ssh -oStrictHostKeyChecking=no -i packer-CI.pem
+              ${SSH_USER}@${INSTANCE_PUBLIC_IP} 'uptime; df -h'
             - 'echo "Instance ${INSTANCE_ID} tested OK!"'
             - >-
               aws ec2 terminate-instances --instance-ids ${INSTANCE_ID} --region
@@ -90,3 +92,5 @@ blocks:
             - >-
               aws ec2 deregister-image --image-id ${AMI_ID} --region
               ${AWS_REGION}
+    dependencies:
+      - Build AMI
