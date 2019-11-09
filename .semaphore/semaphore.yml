@@ -61,8 +61,7 @@ blocks:
           commands:
             - checkout
             - sudo apt update -y && sudo apt install awscli -y
-            - gem install ami_spec
-            - chmod 400 packer-CI.pem
+            - gem install ami_spec --no-ri --no-rdoc
             - artifact pull project manifest.json
             - >-
               AMI_ID=$(cat manifest.json| jq -r '.builds[].artifact_id' | sed -e
@@ -82,8 +81,8 @@ blocks:
               echo "Testing EC2 instance Id:${INSTANCE_ID}, Public
               IP:${INSTANCE_PUBLIC_IP} generated from ami ${AMI_ID}."
             - >-
-              ssh -oStrictHostKeyChecking=no -i packer-CI.pem
-              ${SSH_USER}@${INSTANCE_PUBLIC_IP} 'uptime; df -h'
+              chmod 400 packer-CI.pem && ssh -oStrictHostKeyChecking=no -i
+              packer-CI.pem ${SSH_USER}@${INSTANCE_PUBLIC_IP} 'uptime; df -h'
             - 'echo "Instance ${INSTANCE_ID} tested OK!"'
             - >-
               aws ec2 terminate-instances --instance-ids ${INSTANCE_ID} --region
