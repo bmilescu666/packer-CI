@@ -46,7 +46,7 @@ blocks:
     task:
       secrets:
         - name: AWS
-        - name: packer-CI-ssh
+        - name: packer-CI
       env_vars:
         - name: AWS_REGION
           value: us-east-1
@@ -83,8 +83,9 @@ blocks:
               echo "Testing EC2 instance Id:${INSTANCE_ID}, Public
               IP:${INSTANCE_PUBLIC_IP} generated from ami ${AMI_ID}."
             - >-
-              ls -la && ssh -oStrictHostKeyChecking=no -i packer-CI.pem
-              ${SSH_USER}@${INSTANCE_PUBLIC_IP} 'uptime; df -h'
+              chmod 400 ~/.ssh/packer-CI.pem && ssh -oStrictHostKeyChecking=no
+              -i ~/.ssh/packer-CI.pem ${SSH_USER}@${INSTANCE_PUBLIC_IP} 'uptime;
+              df -h'
             - 'echo "Instance ${INSTANCE_ID} tested OK!"'
             - >-
               aws ec2 terminate-instances --instance-ids ${INSTANCE_ID} --region
