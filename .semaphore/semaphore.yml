@@ -57,7 +57,8 @@ blocks:
       jobs:
         - name: test packer ami
           commands:
-            - sudo apt update -y && sudo apt install jq awscli -y
+            - checkout
+            - sudo apt update -y && sudo apt install awscli -y
             - gem install ami_spec
             - chmod 400 packer-CI.pem
             - artifact pull project manifest.json
