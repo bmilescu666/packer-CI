@@ -58,7 +58,7 @@ blocks:
         - name: test packer ami
           commands:
             - sudo apt update -y && sudo apt install jq awscli -y
-            - gem install serverspec
+            - gem install ami_spec
             - chmod 400 packer-CI.pem
             - artifact pull project manifest.json
             - >-
@@ -88,4 +88,3 @@ blocks:
             - >-
               aws ec2 deregister-image --image-id ${AMI_ID} --region
               ${AWS_REGION}
-            - 'aws ec2 describe-instances --instance-ids ${INSTANCE_ID}'
