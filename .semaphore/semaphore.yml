@@ -52,6 +52,8 @@ blocks:
           value: packer-CI
         - name: SG
           value: sg-0800e2fd2d7ac3912
+        - name: INSTANCE_TYPE
+          value: t2.micro
       jobs:
         - name: test packer ami
           commands:
@@ -63,11 +65,11 @@ blocks:
               "s/${AWS_REGION}://g")
             - >-
               INSTANCE_ID=$(aws ec2 run-instances --image-id ${AMI_ID} --count 1
-              --instance-type t2.micro --key-name ${KEY_PAIR}
+              --instance-type ${INSTANCE_TYPE} --key-name ${KEY_PAIR}
               --security-group-ids ${SG} --region ${AWS_REGION} | jq -r
               '.Instances[].InstanceId')
-            - echo "Waiting for the test instance to spun up..."
-            - sleep 180s
+            - echo "Waiting for the EC2 test instance to spun up..."
+            - sleep 120s
             - >-
               INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances --instance-ids
               ${INSTANCE_ID} --region ${AWS_REGION} --query
@@ -75,7 +77,9 @@ blocks:
             - >-
               echo "Testing EC2 instance Id:${INSTANCE_ID}, Public
               IP:${INSTANCE_PUBLIC_IP} generated from ami ${AMI_ID}."
-            - 'ssh -i packer-CI.pem ubuntu@${INSTANCE_PUBLIC_IP} ''uptime; df -h'''
+            - >-
+              ssh -oStrictHostKeyChecking=no -i packer-CI.pem
+              ubuntu@${INSTANCE_PUBLIC_IP} 'uptime; df -h'
             - 'echo "Instance ${INSTANCE_ID} tested OK!"'
             - >-
               aws ec2 terminate-instances --instance-ids ${INSTANCE_ID} --region
