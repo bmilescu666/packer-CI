@@ -1,5 +1,7 @@
 # packer-CI
 
-## Pipeline description:
+# Validate PR 
 
-# Validate PR block
+# Build 
+
+# Test
