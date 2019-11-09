@@ -62,7 +62,6 @@ blocks:
         - name: test packer ami
           commands:
             - checkout
-            - sudo apt update -y && sudo apt install awscli -y
             - gem install ami_spec --no-ri --no-rdoc
             - chmod 400 ~/.ssh/packer-CI.pem
             - artifact pull project manifest.json
