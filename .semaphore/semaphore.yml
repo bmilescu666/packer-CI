@@ -61,8 +61,11 @@ blocks:
               "s/${AWS_REGION}://g")
             - >-
               INSTANCE_ID=$(aws ec2 run-instances --image-id ${AMI_ID} --count 1
-              --instance-type t2.micro --key-name ${KEY_PAIR} --region
-              ${AWS_REGION} | jq -r '.Instances[].InstanceId')
+              --instance-type t2.micro --key-name ${KEY_PAIR}
+              --security-group-ids ${SG} --region ${AWS_REGION} | jq -r
+              '.Instances[].InstanceId')
+            - echo "Waiting for the test instance to spun up..."
+            - sleep 180s
             - >-
               INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances --instance-ids
               ${INSTANCE_ID} --region ${AWS_REGION} --query
