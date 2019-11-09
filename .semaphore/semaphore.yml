@@ -59,6 +59,7 @@ blocks:
           commands:
             - sudo apt update -y && sudo apt install jq awscli -y
             - gem install serverspec
+            - chmod 400 packer-CI.pem
             - artifact pull project manifest.json
             - >-
               AMI_ID=$(cat manifest.json| jq -r '.builds[].artifact_id' | sed -e
