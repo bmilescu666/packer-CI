@@ -54,6 +54,8 @@ blocks:
           value: sg-0800e2fd2d7ac3912
         - name: INSTANCE_TYPE
           value: t2.micro
+        - name: SSH_USER
+          value: ubuntu
       jobs:
         - name: test packer ami
           commands:
@@ -81,7 +83,7 @@ blocks:
               IP:${INSTANCE_PUBLIC_IP} generated from ami ${AMI_ID}."
             - >-
               ssh -oStrictHostKeyChecking=no -i packer-CI.pem
-              ubuntu@${INSTANCE_PUBLIC_IP} 'uptime; df -h'
+              ${SSH_USER}@${INSTANCE_PUBLIC_IP} 'uptime; df -h'
             - 'echo "Instance ${INSTANCE_ID} tested OK!"'
             - >-
               aws ec2 terminate-instances --instance-ids ${INSTANCE_ID} --region
