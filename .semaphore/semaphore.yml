@@ -5,16 +5,20 @@ agent:
     type: e1-standard-2
     os_image: ubuntu1804
 blocks:
-  - name: ValidatePR
+  - name: Validate
     skip:
       when: branch = 'master'
     task:
+      env_vars:
+        - name: PACKER_VERSION
+          value: "1.4.5"
       jobs:
-        - name: packer validate
+        - name: __packer_validate-PR
           commands:
             - |-
               if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
-                wget https://releases.hashicorp.com/packer/1.4.5/packer_1.4.5_linux_amd64.zip && unzip packer_1.4.5_linux_amd64.zip
+                wget https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip
+                && unzip packer_${PACKER_VERSION}_linux_amd64.zip
                 sudo mv packer /usr/local/bin && sudo chmod +x /usr/local/bin/packer
                 checkout
                 packer validate ami.json
@@ -24,16 +28,19 @@ blocks:
     skip:
       when: branch != 'master'
     task:
+      env_vars:
+        - name: PACKER_VERSION
+          value: "1.4.5"
       secrets:
         - name: AWS
       jobs:
-        - name: packer build
+        - name: __packer_build
           commands:
             - checkout
             - >-
               wget
-              https://releases.hashicorp.com/packer/1.4.5/packer_1.4.5_linux_amd64.zip
-              && unzip packer_1.4.5_linux_amd64.zip
+              https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip
+              && unzip packer_${PACKER_VERSION}_linux_amd64.zip
             - >-
               sudo mv packer /usr/local/bin && sudo chmod +x
               /usr/local/bin/packer
@@ -59,7 +66,7 @@ blocks:
         - name: SSH_USER
           value: ubuntu
       jobs:
-        - name: test packer ami
+        - name: __packer_ami_test
           commands:
             - checkout
             - gem install ami_spec --no-ri --no-rdoc
