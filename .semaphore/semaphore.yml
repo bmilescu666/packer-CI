@@ -7,7 +7,7 @@ agent:
 blocks:
   - name: Validate
     skip:
-      when: branch == 'master'
+      when: branch = 'master'
     task:
       env_vars:
         - name: PACKER_VERSION
