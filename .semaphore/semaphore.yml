@@ -21,6 +21,8 @@ blocks:
                 sudo mv packer /usr/local/bin && sudo chmod +x /usr/local/bin/packer
                 checkout
                 packer validate ami.json
+              else
+                echo "It will be validated upon PR only!"
               fi
     dependencies: []
   - name: Build AMI
