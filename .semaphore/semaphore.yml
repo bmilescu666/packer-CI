@@ -15,13 +15,14 @@ blocks:
       jobs:
         - name: __packer_validate-PR
           commands:
-            - 'if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then'
-            - '  wget https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip'
-            - '  && unzip packer_${PACKER_VERSION}_linux_amd64.zip'
-            - '  sudo mv packer /usr/local/bin && sudo chmod +x /usr/local/bin/packer'
-            - '  checkout'
-            - '  packer validate ami.json'
-            - fi
+            - >-
+              if [ "$SEMAPHORE_GIT_REF_TYPE" = "pull-request" ]; then
+                wget https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip
+                && unzip packer_${PACKER_VERSION}_linux_amd64.zip
+                sudo mv packer /usr/local/bin && sudo chmod +x /usr/local/bin/packer
+                checkout
+                packer validate ami.json
+              fi
     dependencies: []
   - name: Build AMI
     skip:
